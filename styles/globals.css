@@ -3,25 +3,75 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220; */
+  --background-primary: 250, 250, 251;
+  --background-secondary: 255, 255, 255;
+  --primary: 0, 0, 0;
+  --secondary: 130, 130, 130;
+  --tart: 189, 189, 189;
+  --main: #388bff ;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    /* --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0; */
+    --background-primary: 0, 0, 0;
+    --background-secondary: 255, 255, 255;
+    --primary: 255, 255, 255;
+    --secondary: 189, 189, 189;
+    --tart: 189, 189, 189;
+    --main: #b1cef7 ;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: rgb(var(--primary));
+}
+
+
+@keyframes loading {
+  0% { 
+    left: -100px;
+  }
+
+  5%{
+      left: 0;
+  }
+  10%{
+    left: 10%;
+  }
+  20%{
+    left: 20%;
+  }
+  30%{
+    left: 30%;
+  }
+  40% {
+    left: 40%;
+  }
+  50%{
+    left: 50%;
+  }
+  60%{
+    left: 60%;
+  }
+  70%{
+    left: 70%;
+  }
+  80% {
+    left: 80%;
+  }
+  90%{
+    left: 90%;
+  }
+  100% { 
+    left: 100%;
+   }
+}
+
+.animate-loading {
+  animation: loading 1.5s infinite;
+  animation-timing-function: linear;
 }
