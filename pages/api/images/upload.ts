@@ -2,6 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import {Db} from "mongodb";
 import getDb from "@/utils/getDb";
 
+export const config = {
+    api: {
+      bodyParser: {
+        sizeLimit: '10mb',
+      },
+      responseLimit: '10mb'
+    },
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === "POST"){
         const db:Db = await getDb();
