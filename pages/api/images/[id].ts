@@ -24,15 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if(image){
       let base64Data = image.url.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
       let img = Buffer.from(base64Data, 'base64');
-      res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': img.length
-      })
-      res.end(img);
+      // res.writeHead(200, {
+      //   'Content-Type': 'image/png',
+      //   'Content-Length': img.length
+      // })
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Length', img.length);
+      res.status(200).end(img)
+    } else {
+      res.setHeader('Content-Type', 'text/html');
+      res.send(`<h1>No Image Found.</h1>`);
     }
-    
-    res.setHeader('Content-Type', 'text/html');
-    res.send(`<h1>No Image Found.</h1>`)
+    return;    
   } catch (error: unknown) {
     if(error instanceof Error){
       res.status(400).json({message: error.message})
