@@ -9,11 +9,8 @@ export const config = {
     },
     responseLimit: '10mb'
   },
-};
-
-interface errorType {
-  message: string
 }
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const db:Db = await getDb();
@@ -24,16 +21,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       _id: new ObjectId(id as string)
     });
     
-    let htmlContent = `<h1>Some Went Wrong! Image not found.</h1>`;
     if(image){
-      htmlContent = `
-      <div style="background-color: black; height: 99vh; overflow: none; display: flex; margin: -10px; justify-content: center; align-items: center;">
-        <img src=${image.url} style="height: 90vh; width: auto;" alt=${image._id} />
-      </div>`
+      let base64Data = image.url.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+      let img = Buffer.from(base64Data, 'base64');
+      res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': img.length
+      })
+      res.end(img);
     }
     
     res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(htmlContent);
+    res.send(`<h1>No Image Found.</h1>`)
   } catch (error: unknown) {
     if(error instanceof Error){
       res.status(400).json({message: error.message})

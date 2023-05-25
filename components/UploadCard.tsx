@@ -12,7 +12,8 @@ function UploadCard() {
     const [loading, setLoading] = useState<boolean>(false);
     const [file, setFile] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const dropBoxRef = useRef<HTMLDivElement>(null);
+    const [error, setError] = useState<null | string>(null);
+    // const dropBoxRef = useRef<HTMLDivElement>(null);
 
     const onChooseFile = () => {
         const target = inputRef.current;
@@ -26,14 +27,20 @@ function UploadCard() {
     }
 
     const convertBufferToBase64 = (file: File) => {
+        setError(null);
         if (file.type.includes("image")) {
-            console.log(file)
-            const render = new FileReader();
-            render.onload = () => {
-                const base64 = render.result as string;
-                setFile(base64);
+            if (file.size <= 5000000) {
+                const render = new FileReader();
+                render.onload = () => {
+                    const base64 = render.result as string;
+                    setFile(base64);
+                }
+                render.readAsDataURL(file);
+            } else {
+                setError("Image size should be <= 5mb")
             }
-            render.readAsDataURL(file);
+        } else {
+            setError("You can only upload images")
         }
     }
 
@@ -55,7 +62,8 @@ function UploadCard() {
         <Card>
             <div onDragOver={onDragOver} onDrop={onDropHandler} className='flex justify-center items-center flex-col gap-3'>
                 <h2 className='text-2xl font-semibold text-center'>Upload Your Image</h2>
-                <p className='text-secondary'>File Should be jpg, png...</p>
+                <p className='text-secondary'>File Should be jpg, png formate and Size 5Mb or less...</p>
+                {error && <p className='text-red-600'>{error}</p>}
                 {file ? (
                     <ImageViewer file={file} setFile={setFile} setLoading={setLoading} />
                 ) : (<div className='w-[90%] flex justify-center items-center flex-col gap-5'>
